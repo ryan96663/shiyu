@@ -9,7 +9,6 @@
   <img src="https://img.shields.io/badge/platform-WeChat_MiniProgram-07c160" alt="platform">
   <img src="https://img.shields.io/badge/frontend-原生框架-ff6b35" alt="frontend">
   <img src="https://img.shields.io/badge/backend-Node.js_+_Express-339933" alt="backend">
-  <img src="https://img.shields.io/badge/status-Demo_Ready-yellow" alt="status">
 </p>
 
 ---
