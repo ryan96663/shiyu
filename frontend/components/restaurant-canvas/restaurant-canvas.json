@@ -1,0 +1,10 @@
+{
+  "component": true,
+  "usingComponents": {},
+  
+  "componentGenerics": {},
+  
+  "styleIsolation": "isolated",
+  
+  "virtualHost": false
+}

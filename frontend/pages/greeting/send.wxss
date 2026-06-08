@@ -1,0 +1,149 @@
+/* 打招呼页面 */
+.greeting-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 导航栏 */
+.g-nav {
+  height: 88rpx;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30rpx;
+  border-bottom: 1rpx solid #eeeeee;
+  box-sizing: border-box;
+}
+
+.g-back {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+}
+
+.g-back-icon {
+  font-size: 28rpx;
+  color: #999999;
+  line-height: 1;
+}
+
+.g-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.g-placeholder {
+  width: 60rpx;
+}
+
+/* 内容区 */
+.g-body {
+  flex: 1;
+  padding: 30rpx;
+}
+
+/* 预设话术区 */
+.g-preset-area {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.g-preset-text {
+  flex: 1;
+  font-size: 30rpx;
+  color: #333333;
+  line-height: 1.6;
+  margin-right: 20rpx;
+}
+
+.g-custom-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.g-hint-text {
+  font-size: 26rpx;
+  color: #ff6b35;
+  font-weight: 500;
+}
+
+.g-refresh {
+  flex-shrink: 0;
+  padding: 10rpx 24rpx;
+  border: 2rpx solid #ff6b35;
+  border-radius: 24rpx;
+}
+
+.g-refresh-text {
+  font-size: 24rpx;
+  color: #ff6b35;
+  font-weight: 500;
+}
+
+/* 自定义输入 */
+.g-input-area {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 30rpx;
+}
+
+.g-input {
+  width: 100%;
+  font-size: 28rpx;
+  color: #333333;
+  min-height: 48rpx;
+  line-height: 1.5;
+}
+
+.g-counter {
+  display: block;
+  text-align: right;
+  font-size: 22rpx;
+  color: #999999;
+  margin-top: 10rpx;
+}
+
+.g-counter-full {
+  color: #f56c6c;
+}
+
+/* 发送按钮 */
+.g-send {
+  width: 100%;
+  height: 88rpx;
+  background-color: #ff6b35;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.g-send-disabled {
+  background-color: #dddddd;
+}
+
+.g-send-text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.g-send-disabled .g-send-text {
+  color: #999999;
+}

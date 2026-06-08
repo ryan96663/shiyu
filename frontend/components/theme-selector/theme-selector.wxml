@@ -1,0 +1,81 @@
+<view 
+  class="theme-selector" 
+  animation="{{animationData}}"
+  wx:if="{{visible}}"
+  catchtouchmove="stopPropagation"
+>
+  <!-- 遮罩层 -->
+  <view class="theme-selector-mask" catchtap="close"></view>
+  
+  <!-- 主题选择器内容 -->
+  <view class="theme-selector-content" catchtap="stopPropagation">
+    <view class="theme-selector-header">
+      <text class="theme-selector-title">选择店铺风格</text>
+      <view class="theme-selector-close" catchtap="close">
+        <text class="close-icon">✕</text>
+      </view>
+    </view>
+    
+    <view class="theme-selector-body">
+      <!-- 主题列表 -->
+      <view class="theme-list">
+        <block wx:for="{{themes}}" wx:key="id">
+          <view 
+            class="theme-item {{currentTheme === item.id ? 'theme-item--active' : ''}}"
+            data-theme="{{item.id}}"
+            catchtap="switchTheme"
+            hover-class="theme-item--hover"
+            hover-stay-time="100"
+          >
+            <view class="theme-icon">
+              <image 
+                class="theme-icon-image" 
+                src="{{item.icon}}" 
+                mode="aspectFill"
+                wx:if="{{item.icon}}"
+              ></image>
+              <view 
+                class="theme-icon-preview"
+                style="
+                  background: linear-gradient(135deg, {{item.preview.background}}, {{item.preview.accent}});
+                "
+                wx:else
+              >
+              </view>
+            </view>
+            
+            <view class="theme-info">
+              <text class="theme-name">{{item.name}}</text>
+              <text class="theme-description">{{item.description}}</text>
+            </view>
+            
+            <view class="theme-check" wx:if="{{currentTheme === item.id}}">
+              <text class="check-icon">✓</text>
+            </view>
+          </view>
+        </block>
+      </view>
+      
+      <!-- 功能按钮 -->
+      <view class="theme-actions">
+        <button 
+          class="btn btn-primary"
+          type="primary"
+          size="mini"
+          catchtap="close"
+        >
+          确定
+        </button>
+        
+        <button 
+          class="btn btn-secondary"
+          type="default"
+          size="mini"
+          catchtap="close"
+        >
+          取消
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

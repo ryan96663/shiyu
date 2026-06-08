@@ -1,0 +1,256 @@
+<view class="bottle-container">
+  <!-- 顶部导航栏 -->
+  <view class="top-bar">
+    <navigator class="back-btn" open-type="navigateBack" delta="1">
+      <icon type="back" size="24" color="#333333"></icon>
+    </navigator>
+    
+    <view class="title">漂流瓶</view>
+    
+    <view class="actions">
+      <button class="pick-btn" bindtap="onPickBottle">
+        <icon type="search" size="20" color="#ffffff"></icon>
+        <text>捞一个</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 统计信息卡片 -->
+  <view class="stats-card">
+    <view class="stats-item">
+      <text class="stats-number">{{stats.thrown}}</text>
+      <text class="stats-label">扔出</text>
+    </view>
+    <view class="stats-divider"></view>
+    
+    <view class="stats-item">
+      <text class="stats-number">{{stats.picked}}</text>
+      <text class="stats-label">捞到</text>
+    </view>
+    <view class="stats-divider"></view>
+    
+    <view class="stats-item">
+      <text class="stats-number">{{stats.replied}}</text>
+      <text class="stats-label">已回复</text>
+    </view>
+    <view class="stats-divider"></view>
+    
+    <view class="stats-item">
+      <text class="stats-number">{{stats.receivedLikes}}</text>
+      <text class="stats-label">获赞</text>
+    </view>
+  </view>
+
+  <!-- 标签切换 -->
+  <view class="tab-bar">
+    <button 
+      class="tab-btn {{activeTab === 'picked' ? 'active' : ''}}" 
+      data-tab="picked"
+      bindtap="switchTab">
+      我捞到的
+      <text class="tab-badge" wx:if="{{pickedBottles.length > 0}}">{{pickedBottles.length}}</text>
+    </button>
+    
+    <button 
+      class="tab-btn {{activeTab === 'thrown' ? 'active' : ''}}" 
+      data-tab="thrown"
+      bindtap="switchTab">
+      我扔的
+      <text class="tab-badge" wx:if="{{thrownBottles.length > 0}}">{{thrownBottles.length}}</text>
+    </button>
+  </view>
+
+  <!-- 漂流瓶列表 -->
+  <scroll-view class="bottle-list" scroll-y>
+    <!-- 捞到的漂流瓶 -->
+    <block wx:if="{{activeTab === 'picked'}}">
+      <view class="list-container" wx:if="{{pickedBottles.length > 0}}">
+        <block wx:for="{{pickedBottles}}" wx:key="id">
+          <view class="bottle-item">
+            <view class="bottle-header">
+              <view class="bottle-info">
+                <text class="area-tag">{{item.area || '未知地区'}}</text>
+                <text class="time-text">{{formatTime(item.createdAt)}}</text>
+                <text class="pick-time" wx:if="{{item.pickedAt}}">捞取于 {{formatTime(item.pickedAt)}}</text>
+              </view>
+              
+              <view class="status-badge">
+                <text class="status-text" wx:if="{{item.isReplied}}">已回复</text>
+                <text class="status-text pending" wx:elif="{{!item.isReplied}}">未回复</text>
+              </view>
+            </view>
+            
+            <view class="bottle-content">
+              <text class="content-text" selectable="true" data-content="{{item.content}}" bindlongpress="copyBottleContent">
+                {{item.content}}
+              </text>
+              
+              <text class="question-text" wx:if="{{item.hasQuestion}}">
+                问题：{{item.question}}
+              </text>
+            </view>
+            
+            <view class="reply-section" wx:if="{{item.isReplied}}">
+              <view class="reply-header">
+                <text class="reply-label">回复：</text>
+                <text class="reply-time">{{formatTime(item.replyAt)}}</text>
+              </view>
+              <text class="reply-content" selectable="true" data-content="{{item.replyContent}}" bindlongpress="copyBottleContent">
+                {{item.replyContent}}
+              </text>
+            </view>
+            
+            <view class="bottle-actions">
+              <button 
+                class="action-btn reply-btn" 
+                data-bottle="{{item}}" 
+                bindtap="onReplyBottle"
+                wx:if="{{!item.isReplied}}">
+                <icon type="edit" size="16" color="#ff6b35"></icon>
+                <text>回复</text>
+              </button>
+              
+              <button 
+                class="action-btn like-btn" 
+                data-bottle="{{item}}" 
+                bindtap="onLikeBottle"
+                wx:if="{{item.isReplied}}">
+                <icon type="like" size="16" color="#ff6b35"></icon>
+                <text>点赞</text>
+              </button>
+            </view>
+          </view>
+        </block>
+      </view>
+      
+      <view class="empty-state" wx:elif="{{pickedBottles.length === 0}}">
+        <image class="empty-image" src="/assets/images/empty-bottle.png" mode="aspectFit"></image>
+        <text class="empty-text">还没有捞到漂流瓶</text>
+        <button class="pick-action-btn" bindtap="onPickBottle">
+          去捞一个 <icon type="search" size="18" color="#ffffff"></icon>
+        </button>
+      </view>
+    </block>
+
+    <!-- 扔出的漂流瓶 -->
+    <block wx:if="{{activeTab === 'thrown'}}">
+      <view class="list-container" wx:if="{{thrownBottles.length > 0}}">
+        <block wx:for="{{thrownBottles}}" wx:key="id">
+          <view class="bottle-item">
+            <view class="bottle-header">
+              <view class="bottle-info">
+                <text class="area-tag">{{item.area || '未知地区'}}</text>
+                <text class="time-text">{{formatTime(item.createdAt)}}</text>
+              </view>
+              
+              <view class="status-badge">
+                <text class="status-text" wx:if="{{item.isReplied}}">已回复</text>
+                <text class="status-text pending" wx:elif="{{!item.isReplied}}">未回复</text>
+              </view>
+            </view>
+            
+            <view class="bottle-content">
+              <text class="content-text" selectable="true" data-content="{{item.content}}" bindlongpress="copyBottleContent">
+                {{item.content}}
+              </text>
+              
+              <text class="question-text" wx:if="{{item.hasQuestion}}">
+                我的问题：{{item.question}}
+              </text>
+            </view>
+            
+            <view class="reply-section" wx:if="{{item.isReplied}}">
+              <view class="reply-header">
+                <text class="reply-label">TA的回复：</text>
+                <text class="reply-time">{{formatTime(item.replyAt)}}</text>
+              </view>
+              <text class="reply-content other-reply" selectable="true" data-content="{{item.replyContent}}" bindlongpress="copyBottleContent">
+                {{item.replyContent}}
+              </text>
+              
+              <button 
+                class="action-btn like-btn reply-action" 
+                data-bottle="{{item}}" 
+                bindtap="onLikeBottle">
+                <icon type="like" size="16" color="#ff6b35"></icon>
+                <text>为回复点赞</text>
+              </button>
+            </view>
+          </view>
+        </block>
+      </view>
+      
+      <view class="empty-state" wx:elif="{{thrownBottles.length === 0}}">
+        <image class="empty-image" src="/assets/images/empty-throw.png" mode="aspectFit"></image>
+        <text class="empty-text">还没有扔出漂流瓶</text>
+        <button class="throw-action-btn" bindtap="onThrowBottle">
+          去扔一个 <icon type="add" size="18" color="#ffffff"></icon>
+        </button>
+      </view>
+    </block>
+  </scroll-view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-actions">
+    <button class="action-button pick-btn-main" bindtap="onPickBottle">
+      <icon type="search" size="20" color="#ffffff"></icon>
+      <text>捞一个</text>
+    </button>
+    
+    <button class="action-button throw-btn-main" bindtap="onThrowBottle">
+      <icon type="add" size="20" color="#ffffff"></icon>
+      <text>扔一个</text>
+    </button>
+  </view>
+
+  <!-- 回复弹窗 -->
+  <view class="modal-overlay" wx:if="{{showReplyModal}}">
+    <view class="reply-modal">
+      <view class="modal-header">
+        <text class="modal-title">回复漂流瓶</text>
+        <button class="modal-close" bindtap="closeReplyModal">
+          <icon type="clear" size="20" color="#666666"></icon>
+        </button>
+      </view>
+      
+      <view class="modal-body">
+        <view class="original-content">
+          <text class="content-label">原内容：</text>
+          <text class="original-text">{{selectedBottle.content}}</text>
+          
+          <text class="question-label" wx:if="{{selectedBottle.hasQuestion}}">问题：</text>
+          <text class="question-text" wx:if="{{selectedBottle.hasQuestion}}">{{selectedBottle.question}}</text>
+        </view>
+        
+        <view class="reply-section">
+          <text class="reply-label">我的回复：</text>
+          <textarea 
+            class="reply-input"
+            placeholder="输入你的回复..."
+            value="{{replyContent}}"
+            bindinput="onReplyInput"
+            maxlength="200"
+            auto-focus="true"
+            cursor-spacing="20"></textarea>
+          <text class="char-count">{{replyContent.length}}/200</text>
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="cancel-btn" bindtap="closeReplyModal">取消</button>
+        <button class="send-btn" bindtap="sendReply" disabled="{{!replyContent.trim()}}">发送</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <loading type="circular" size="30" color="#ff6b35"></loading>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 提示信息 -->
+  <view class="toast" wx:if="{{showToast}}">
+    <text class="toast-text">{{toastMessage}}</text>
+  </view>
+</view>

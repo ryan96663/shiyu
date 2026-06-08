@@ -1,0 +1,204 @@
+<view class="rankings-container">
+  <!-- 顶部导航栏 -->
+  <view class="top-bar">
+    <navigator class="back-btn" open-type="navigateBack" delta="1">
+      <icon type="back" size="24" color="#333333"></icon>
+    </navigator>
+    
+    <view class="title">排行榜</view>
+    
+    <view class="placeholder"></view>
+  </view>
+
+  <!-- 时间周期切换 -->
+  <view class="period-selector">
+    <block wx:for="{{['daily', 'weekly', 'monthly', 'all']}}" wx:key="period">
+      <button 
+        class="period-btn {{activePeriod === item ? 'active' : ''}}"
+        data-period="{{item}}"
+        bindtap="switchPeriod">
+        {{formatPeriod(item)}}
+      </button>
+    </block>
+  </view>
+
+  <!-- 排行榜类型切换 -->
+  <view class="tab-selector">
+    <button 
+      class="tab-btn {{activeTab === 'people' ? 'active' : ''}}" 
+      data-tab="people"
+      bindtap="switchTab">
+      <text>人气榜</text>
+      <text class="tab-desc">用户</text>
+    </button>
+    
+    <button 
+      class="tab-btn {{activeTab === 'stores' ? 'active' : ''}}" 
+      data-tab="stores"
+      bindtap="switchTab">
+      <text>店铺榜</text>
+      <text class="tab-desc">餐厅</text>
+    </button>
+  </view>
+
+  <!-- 排行榜内容 -->
+  <scroll-view class="rankings-scroll" scroll-y>
+    <view class="rankings-content">
+      <!-- 人气榜 -->
+      <block wx:if="{{activeTab === 'people'}}">
+        <view class="rankings-list" wx:if="{{peopleRankings.length > 0}}">
+          <!-- 前三名特殊显示 -->
+          <view class="top-three-section">
+            <block wx:for="{{peopleRankings.slice(0, 3)}}" wx:key="rank">
+              <view class="top-ranker rank-{{item.rank}}" data-user-id="{{item.targetId}}" bindtap="onUserTap">
+                <view class="rank-number">
+                  <text>{{item.rank}}</text>
+                </view>
+                
+                <view class="ranker-avatar">
+                  <image 
+                    src="{{item.avatar || 'https://via.placeholder.com/60'}}" 
+                    mode="aspectFill"
+                    class="avatar-image"
+                  ></image>
+                  <view class="rank-badge">
+                    <text>{{item.rank}}</text>
+                  </view>
+                </view>
+                
+                <view class="ranker-info">
+                  <text class="ranker-name">{{item.displayName || '用户' + item.targetId}}</text>
+                  <text class="ranker-stats">
+                    {{item.totalReviews}}条评价 • {{item.averageRating || 0}}分
+                  </text>
+                  <text class="ranker-likes" wx:if="{{item.totalLikes > 0}}">
+                    {{item.totalLikes}}个赞
+                  </text>
+                </view>
+                
+                <view class="rank-trend">
+                  <text class="trend-text {{item.rankChange > 0 ? 'up' : item.rankChange < 0 ? 'down' : 'stable'}}">
+                    {{formatRankChange(item.rankChange || 0)}}
+                  </text>
+                </view>
+              </view>
+            </block>
+          </view>
+          
+          <!-- 其他名次 -->
+          <view class="other-rankers" wx:if="{{peopleRankings.length > 3}}">
+            <block wx:for="{{peopleRankings.slice(3)}}" wx:key="rank">
+              <view class="normal-ranker" data-user-id="{{item.targetId}}" bindtap="onUserTap">
+                <text class="normal-rank-number">{{item.rank}}</text>
+                
+                <image 
+                  src="{{item.avatar || 'https://via.placeholder.com/40'}}" 
+                  mode="aspectFill"
+                  class="normal-avatar"
+                ></image>
+                
+                <view class="normal-rank-info">
+                  <text class="normal-rank-name">{{item.displayName || '用户' + item.targetId}}</text>
+                  <text class="normal-rank-stats">
+                    {{item.totalReviews}}条评价 • {{item.averageRating || 0}}分
+                  </text>
+                </view>
+                
+                <text class="normal-rank-likes">{{item.totalLikes || 0}}赞</text>
+              </view>
+            </block>
+          </view>
+        </view>
+        
+        <view class="empty-rankings" wx:elif="{{peopleRankings.length === 0}}">
+          <image class="empty-image" src="/assets/images/empty-ranking.png" mode="aspectFit"></image>
+          <text class="empty-text">暂无人气榜单数据</text>
+          <text class="empty-tip">快来参与群组互动成为人气王吧！</text>
+        </view>
+      </block>
+
+      <!-- 店铺榜 -->
+      <block wx:if="{{activeTab === 'stores'}}">
+        <view class="rankings-list" wx:if="{{storeRankings.length > 0}}">
+          <!-- 前三名特殊显示 -->
+          <view class="top-three-section">
+            <block wx:for="{{storeRankings.slice(0, 3)}}" wx:key="rank">
+              <view class="top-ranker rank-{{item.rank}}" data-store-id="{{item.targetId}}" bindtap="onStoreTap">
+                <view class="rank-number">
+                  <text>{{item.rank}}</text>
+                </view>
+                
+                <view class="ranker-photo">
+                  <image 
+                    src="{{item.storePhoto || 'https://via.placeholder.com/60'}}" 
+                    mode="aspectFill"
+                    class="photo-image"
+                  ></image>
+                  <view class="rank-badge">
+                    <text>{{item.rank}}</text>
+                  </view>
+                </view>
+                
+                <view class="ranker-info">
+                  <text class="store-name">{{item.storeName || '店铺' + item.targetId}}</text>
+                  <text class="store-area">{{item.storeArea || '未知地区'}}</text>
+                  <text class="store-stats">
+                    {{item.totalReviews}}条评价 • {{item.averageRating || 0}}分
+                  </text>
+                </view>
+                
+                <view class="rank-trend">
+                  <text class="trend-text {{item.rankChange > 0 ? 'up' : item.rankChange < 0 ? 'down' : 'stable'}}">
+                    {{formatRankChange(item.rankChange || 0)}}
+                  </text>
+                </view>
+              </view>
+            </block>
+          </view>
+          
+          <!-- 其他名次 -->
+          <view class="other-rankers" wx:if="{{storeRankings.length > 3}}">
+            <block wx:for="{{storeRankings.slice(3)}}" wx:key="rank">
+              <view class="normal-ranker" data-store-id="{{item.targetId}}" bindtap="onStoreTap">
+                <text class="normal-rank-number">{{item.rank}}</text>
+                
+                <image 
+                  src="{{item.storePhoto || 'https://via.placeholder.com/40'}}" 
+                  mode="aspectFill"
+                  class="normal-store-photo"
+                ></image>
+                
+                <view class="normal-rank-info">
+                  <text class="normal-store-name">{{item.storeName || '店铺' + item.targetId}}</text>
+                  <text class="normal-store-area">{{item.storeArea || '未知地区'}}</text>
+                  <text class="normal-store-stats">
+                    {{item.totalReviews}}条评价 • {{item.averageRating || 0}}分
+                  </text>
+                </view>
+                
+                <text class="normal-store-likes">{{item.totalLikes || 0}}赞</text>
+              </view>
+            </block>
+          </view>
+        </view>
+        
+        <view class="empty-rankings" wx:elif="{{storeRankings.length === 0}}">
+          <image class="empty-image" src="/assets/images/empty-stores.png" mode="aspectFit"></image>
+          <text class="empty-text">暂无店铺榜单数据</text>
+          <text class="empty-tip">快去各家店铺留下你的评价吧！</text>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <loading type="circular" size="30" color="#ff6b35"></loading>
+    <text class="loading-text">榜单生成中...</text>
+  </view>
+
+  <!-- 提示信息 -->
+  <view class="toast" wx:if="{{showToast}}">
+    <text class="toast-text">{{toastMessage}}</text>
+  </view>
+</view>

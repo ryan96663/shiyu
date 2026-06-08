@@ -1,0 +1,14 @@
+{
+  "navigationBarTitleText": "自助服务餐厅画布",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#f5f7fa",
+  "backgroundTextStyle": "dark",
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 50,
+  "navigationStyle": "default",
+  "usingComponents": {
+    "restaurant-canvas": "../../components/restaurant-canvas/restaurant-canvas"
+  },
+  "disableScroll": false
+}

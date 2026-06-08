@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "漂流瓶",
+  "navigationBarBackgroundColor": "#ff6b35",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#f0f8ff",
+  "backgroundTextStyle": "dark",
+  "enablePullDownRefresh": true
+}

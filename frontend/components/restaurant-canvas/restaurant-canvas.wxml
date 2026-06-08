@@ -1,0 +1,26 @@
+<view class="scene-container">
+  <image 
+    class="scene-background" 
+    src="{{ sceneConfig.bgUrl || '/images/mock/store1.jpg' }}" 
+    mode="widthFix"
+  />
+
+  <block wx:for="{{ renderTables }}" wx:key="id">
+    <view 
+      class="table-prop" 
+      style="
+        left: {{ item.left }}px; 
+        top: {{ item.top }}px; 
+        z-index: {{ item.zIndex }};"
+      data-id="{{ item.id }}"
+      bindtap="onTableTap"
+    >
+      <image 
+        class="table-image" 
+        src="{{ item.imgUrl || '/images/mock/store1.jpg' }}" 
+        mode="aspectFit"
+      />
+      <view class="desk-badge" wx:if="{{ item.occupancy > 0 }}">桌{{ item.id + 1 }}</view>
+    </view>
+  </block>
+</view>

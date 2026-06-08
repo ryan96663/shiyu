@@ -1,0 +1,127 @@
+<view class="reply-container">
+  <!-- 顶部导航栏 -->
+  <view class="top-bar">
+    <navigator class="back-btn" open-type="navigateBack" delta="1">
+      <icon type="back" size="24" color="#333333"></icon>
+    </navigator>
+    
+    <view class="title">回复漂流瓶</view>
+    
+    <button class="send-btn" bindtap="goBack">返回</button>
+  </view>
+
+  <!-- 主要内容区域 -->
+  <scroll-view class="content-scroll" scroll-y>
+    <view class="reply-form">
+      <!-- 原始漂流瓶内容卡片 -->
+      <view class="original-card">
+        <view class="card-header">
+          <text class="card-title">收到的漂流瓶</text>
+          <text class="bottle-id">#{{bottleId}}</text>
+        </view>
+
+        <view class="bottle-content">
+          <text class="content-title">漂流瓶内容：</text>
+          <text 
+            class="content-text" 
+            selectable="true"
+            data-content="{{bottleContent}}"
+            bindlongpress="copyContent">
+            {{bottleContent || '（无内容）'}}
+          </text>
+        </view>
+
+        <view class="question-content" wx:if="{{hasQuestion}}">
+          <text class="question-title">TA的问题：</text>
+          <text 
+            class="question-text"
+            selectable="true"
+            data-content="{{bottleQuestion}}"
+            bindlongpress="copyContent">
+            {{bottleQuestion}}
+          </text>
+        </view>
+      </view>
+
+      <!-- 我的回复卡片 -->
+      <view class="reply-card">
+        <view class="reply-header">
+          <text class="reply-title">我的回复</text>
+          <text class="char-count">{{replyCount}}/200</text>
+        </view>
+
+        <textarea 
+          class="reply-input"
+          placeholder="输入你的回复...（最多200字）"
+          value="{{replyContent}}"
+          bindinput="onReplyInput"
+          maxlength="200"
+          auto-focus="true"
+          cursor-spacing="20"
+        ></textarea>
+
+        <view class="reply-tips">
+          <text class="tip-item">• 回复将直接发送给漂流瓶的创建者</text>
+          <text class="tip-item">• 请保持友善交流，禁止恶意内容</text>
+          <text class="tip-item">• 高质量的回复更容易获得点赞</text>
+        </view>
+
+        <!-- 快速回复模板 -->
+        <view class="quick-reply-section">
+          <text class="quick-reply-title">快速回复</text>
+          <view class="quick-reply-buttons">
+            <button class="quick-btn" data-content="好的，谢谢推荐！" bindtap="onQuickReply">
+              谢谢推荐
+            </button>
+            <button class="quick-btn" data-content="这真是个好主意" bindtap="onQuickReply">
+              好主意
+            </button>
+            <button class="quick-btn" data-content="我也遇到过类似的情况" bindtap="onQuickReply">
+              感同身受
+            </button>
+            <button class="quick-btn" data-content="有机会一定要试试" bindtap="onQuickReply">
+              期待尝试
+            </button>
+          </view>
+        </view>
+      </view>
+
+      <!-- 回复统计和信息 -->
+      <view class="info-section">
+        <text class="info-title">回复须知</text>
+        
+        <view class="info-list">
+          <text class="info-item">• 您的回复将直接发送给出瓶子的创建者</text>
+          <text class="info-item">• 漂流瓶创建者可看到您的回复并给您点赞</text>
+          <text class="info-item">• 请保持友善交流，禁止恶意内容</text>
+          <text class="info-item">• 一次只能回复一个漂流瓶一次</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部操作区 -->
+  <view class="bottom-actions">
+    <button 
+      class="reply-action-btn" 
+      bindtap="sendReply"
+      disabled="{{!replyContent.trim()}}">
+      <icon type="send" size="20" color="#ffffff"></icon>
+      <text>发送回复</text>
+    </button>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <loading type="circular" size="30" color="#ff6b35"></loading>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 提示信息 -->
+  <view class="toast" wx:if="{{showToast}}">
+    <text class="toast-text">{{toastMessage}}</text>
+  </view>
+
+  <!-- 隐藏的快速回复输入函数 -->
+  {{null}}
+</view>

@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "店铺场景",
+  "navigationBarBackgroundColor": "#ff6b35",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#000000",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": false,
+  "disableScroll": false,
+  "usingComponents": {}
+}

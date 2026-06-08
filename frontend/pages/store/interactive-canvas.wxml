@@ -1,0 +1,249 @@
+<!-- 
+  Interactive Canvas Page Template
+  全功能交互式餐厅画布页面模板
+  支持主题切换、人数调整、实时监控等完整功能
+-->
+
+<view class="page-container">
+  
+  <!-- 顶部标题栏 -->
+  <view class="page-header">
+    <view class="header-title">
+      <text class="emoji">🍽️</text>
+      <text class="title-text">自助服务餐厅画布</text>
+      <text class="subtitle">交互式场景预览与调试</text>
+    </view>
+    
+    <view class="header-actions">
+      <button class="action-btn refresh-btn" bindtap="refreshScene" size="mini">🔄</button>
+      <button class="action-btn share-btn" bindtap="onShareAppMessage" size="mini">📤</button>
+      <button class="action-btn settings-btn" bindtap="toggleControls" size="mini">⚙️</button>
+    </view>
+  </view>
+  
+  <!-- 控制栏 -->
+  <view class="control-panel" wx:if="{{showControls}}">
+    
+    <!-- 主题切换 -->
+    <view class="control-section">
+      <view class="section-title">主题切换</view>
+      <view class="theme-switcher">
+        <button 
+          class="theme-btn {{sceneConfig.theme === 'day_sunny' ? 'active' : ''}}" 
+          data-theme="day_sunny" 
+          bindtap="switchTheme"
+        >
+          🌞 白天晴天
+        </button>
+        <button 
+          class="theme-btn {{sceneConfig.theme === 'day_rainy' ? 'active' : ''}}" 
+          data-theme="day_rainy" 
+          bindtap="switchTheme"
+        >
+          🌧️ 白天雨天
+        </button>
+        <button 
+          class="theme-btn {{sceneConfig.theme === 'night_sunny' ? 'active' : ''}}" 
+          data-theme="night_sunny" 
+          bindtap="switchTheme"
+        >
+          🌙 夜间晴天
+        </button>
+        <button 
+          class="theme-btn {{sceneConfig.theme === 'night_rainy' ? 'active' : ''}}" 
+          data-theme="night_rainy" 
+          bindtap="switchTheme"
+        >
+          🌧️🌙 夜间雨天
+        </button>
+      </view>
+    </view>
+    
+    <!-- 餐厅类型切换 -->
+    <view class="control-section">
+      <view class="section-title">餐厅类型</view>
+      <view class="type-switcher">
+        <button 
+          class="type-btn {{sceneConfig.restaurantType === 'sichuan' ? 'active' : ''}}" 
+          data-type="sichuan" 
+          bindtap="switchRestaurantType"
+        >
+          🌶️ 川菜馆
+        </button>
+        <button 
+          class="type-btn {{sceneConfig.restaurantType === 'cantonese' ? 'active' : ''}}" 
+          data-type="cantonese" 
+          bindtap="switchRestaurantType"
+        >
+          🥢 粤式茶餐厅
+        </button>
+        <button 
+          class="type-btn {{sceneConfig.restaurantType === 'japanese' ? 'active' : ''}}" 
+          data-type="japanese" 
+          bindtap="switchRestaurantType"
+        >
+          🍜 日式拉面馆
+        </button>
+        <button 
+          class="type-btn {{sceneConfig.restaurantType === 'bbq' ? 'active' : ''}}" 
+          data-type="bbq" 
+          bindtap="switchRestaurantType"
+        >
+          🥩 烧烤店
+        </button>
+      </view>
+    </view>
+    
+    <!-- 人数调整 -->
+    <view class="control-section">
+      <view class="section-title">人数配置</view>
+      <view class="people-config">
+        <view class="people-display">
+          <text class="people-count">{{sceneConfig.peopleCount}}</text>
+          <text class="people-unit">人</text>
+        </view>
+        <button class="people-adjust-btn" bindtap="showPeopleInput">
+          调整人数
+        </button>
+        <button class="people-adjust-btn" bindtap="generateRandomScene">
+          🎲 随机生成
+        </button>
+      </view>
+    </view>
+    
+    <!-- 预设场景 -->
+    <view class="control-section" wx:if="{{presetScenes.length > 0}}">
+      <view class="section-title">预设场景</view>
+      <scroll-view class="preset-scroller" scroll-x="true">
+        <view class="preset-list">
+          <block wx:for="{{presetScenes}}" wx:key="sceneId">
+            <view 
+              class="preset-item {{currentPresetIndex === index ? 'active' : ''}}"
+              data-index="{{index}}"
+              bindtap="switchToScene"
+            >
+              <view class="preset-badge">{{item.name}}</view>
+              <view class="preset-info">
+                <text class="preset-theme">{{item.config.restaurantType}}</text>
+                <text class="preset-people">{{item.config.peopleCount}}人</text>
+              </view>
+            </view>
+          </block>
+        </view>
+      </scroll-view>
+    </view>
+    
+  </view>
+  
+  <!-- 状态栏 -->
+  <view class="status-bar">
+    <view class="status-item">
+      <text class="status-label">主题:</text>
+      <text class="status-value">{{themeData.name || '加载中...'}}</text>
+    </view>
+    <view class="status-item">
+      <text class="status-label">表格:</text>
+      <text class="status-value">{{layoutStats.summary.totalTables || 0}}桌</text>
+    </view>
+    <view class="status-item">
+      <text class="status-label">占用率:</text>
+      <text class="status-value">{{layoutStats.summary.occupancyRate || '0%'}}</text>
+    </view>
+    <view class="status-item">
+      <text class="status-label">性能:</text>
+      <text class="status-value">{{performanceMetrics.averageLoadTime || '0ms'}}</text>
+    </view>
+  </view>
+  
+  <!-- 主画布区域 -->
+  <view class="canvas-container">
+    
+    <!-- 加载遮罩 -->
+    <view class="loading-mask" wx:if="{{isLoading || isGenerating}}">
+      <view class="loading-content">
+        <view class="loading-spinner"></view>
+        <text class="loading-text">
+          {{isLoading ? '加载关键资源中...' : isGenerating ? '生成场景中...' : ''}}
+        </text>
+        <text class="loading-detail" wx:if="{{performanceMetrics}}">
+          已加载 {{performanceMetrics.successCount}}/{{performanceMetrics.totalRequests}}
+        </text>
+      </view>
+    </view>
+    
+    <!-- 错误提示 -->
+    <view class="error-overlay" wx:if="{{showError}}">
+      <view class="error-content">
+        <text class="error-icon">❌</text>
+        <text class="error-title">出现错误</text>
+        <text class="error-message">{{errorMessage}}</text>
+        <button class="error-action" bindtap="resetError">重试</button>
+      </view>
+    </view>
+    
+    <!-- Restaurant Canvas 组件 -->
+    <restaurant-canvas
+      id="canvasComponent"
+      class="main-canvas"
+      wx:if="{{!isLoading && !showError && tableList.length > 0}}"
+      scene-config="{{sceneConfig}}"
+      current-time="{{currentTime}}"
+      current-weather="{{currentWeather}}"
+      show-preview-badge="{{true}}"
+      enable-interaction="{{!isGenerating}}"
+      bindtabletap="onTableTap"
+      bindimageerror="onImageError"
+    />
+    
+    <!-- 空状态提示 -->
+    <view class="empty-state" wx:if="{{!isLoading && tableList.length === 0 && !showError}}">
+      <text class="empty-icon">🍽️</text>
+      <text class="empty-title">场景生成中...</text>
+      <text class="empty-description">点击右上角设置按钮调整参数，然后重新生成场景</text>
+      <button class="empty-action" bindtap="generateRandomScene">快速生成示例</button>
+    </view>
+    
+  </view>
+  
+  <!-- 底部操作区 -->
+  <view class="bottom-actions">
+    
+    <!-- 导出配置 -->
+    <button class="bottom-btn export-btn" bindtap="exportSceneConfig">
+      📤 导出配置
+    </button>
+    
+    <!-- 调试信息 -->
+    <button class="bottom-btn debug-btn" open-type="getUserInfo" bindtap="getSceneStats">
+      🔧 调试信息
+    </button>
+    
+    <!-- 快速入口 -->
+    <button class="bottom-btn quick-btn" open-type="navigate" url="../store/canvas-preview">
+      ⚡ 基础预览
+    </button>
+    
+  </view>
+  
+  <!-- 人数输入弹窗 (组件原生实现) -->
+  <modal 
+    title="👥 设置人数" 
+    hidden="{{!showPersonInput}}" 
+    bindconfirm="onPeopleCountConfirm" 
+    bindcancel="onPeopleCountCancel"
+  >
+    <view class="modal-content">
+      <input 
+        class="modal-input" 
+        type="number" 
+        value="{{sceneConfig.peopleCount}}"
+        placeholder="请输入人数 (0-200)"
+        max="200" 
+        min="0"
+        focus="true"
+      />
+      <text class="modal-tip">提示：合理安排人数以获得最佳视觉体验</text>
+    </view>
+  </modal>
+  
+</view>

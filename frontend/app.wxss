@@ -1,0 +1,46 @@
+/**
+ * 食遇 - 全局样式
+ * @author Foodie Social Team
+ */
+
+/* === 基础重置 === */
+page {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 28rpx;
+  color: #333333;
+  background-color: #f5f5f5;
+  line-height: 1.5;
+}
+
+/* === 通用按钮重置 === */
+button {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  line-height: inherit;
+  font-size: inherit;
+}
+
+button::after {
+  border: none;
+}
+
+/* === 通用工具类 === */
+.btn-hover {
+  opacity: 0.7;
+}
+
+/* 单行文本溢出省略 */
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* === 安全区域适配 === */
+.safe-area-bottom {
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}

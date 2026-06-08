@@ -1,0 +1,158 @@
+/* 搜索栏样式 */
+.search-bar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-container {
+  height: 70rpx;
+  background-color: #f5f5f5;
+  border-radius: 35rpx;
+  border: 1rpx solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.search-container.focused {
+  border-color: #ff6b35;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2rpx rgba(255, 107, 53, 0.2);
+}
+
+.search-container.disabled {
+  background-color: #f9f9f9;
+  border-color: #e8e8e8;
+}
+
+.search-icon {
+  margin-right: 15rpx;
+  transition: color 0.3s ease;
+}
+
+.search-input {
+  flex: 1;
+  height: 60rpx;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 24rpx;
+  color: #333333;
+}
+
+.search-input:focus {
+  background-color: transparent;
+}
+
+.clear-btn {
+  width: 40rpx;
+  height: 40rpx;
+  border: none;
+  background-color: transparent;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10rpx;
+  padding: 0;
+}
+
+.clear-btn-hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.search-btn {
+  height: 50rpx;
+  background-color: #ff6b35;
+  color: #ffffff;
+  border: none;
+  border-radius: 25rpx;
+  padding: 0 20rpx;
+  font-size: 20rpx;
+  margin-left: 10rpx;
+}
+
+.search-btn-hover {
+  background-color: #e55a2d;
+}
+
+/* 搜索建议 */
+.search-suggestions {
+  position: absolute;
+  top: 80rpx;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border: 1rpx solid #e0e0e0;
+  border-radius: 10rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  max-height: 400rpx;
+}
+
+.suggestion-list {
+  max-height: 400rpx;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.suggestion-item:active {
+  background-color: #f9f9f9;
+}
+
+.suggestion-icon {
+  margin-right: 12rpx;
+}
+
+.suggestion-text {
+  flex: 1;
+  font-size: 22rpx;
+  color: #333333;
+  line-height: 1.3;
+}
+
+.suggestion-desc {
+  font-size: 18rpx;
+  color: #999999;
+  margin-left: 10rpx;
+}
+
+/* 快速标签 */
+.quick-tags {
+  margin-top: 15rpx;
+}
+
+.tag-list {
+  white-space: nowrap;
+}
+
+.quick-tag {
+  display: inline-block;
+  height: 50rpx;
+  background-color: #f5f5f5;
+  border: 1rpx solid #e0e0e0;
+  border-radius: 25rpx;
+  padding: 0 20rpx;
+  font-size: 20rpx;
+  color: #666666;
+  margin-right: 10rpx;
+  line-height: 50rpx;
+}
+
+.quick-tag.active {
+  background-color: #ff6b35;
+  border-color: #ff6b35;
+  color: #ffffff;
+}
+
+.quick-tag:active {
+  opacity: 0.8;
+}

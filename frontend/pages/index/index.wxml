@@ -1,0 +1,184 @@
+<!-- 美食社交小程序 - 首页 -->
+<!-- 作者: Foodie Social Team -->
+
+<view class="container">
+  <!-- 顶部搜索栏 -->
+  <view class="header">
+    <view class="search-section">
+      <view class="location" bindtap="onLocationTap">
+        <image class="location-icon" src="/images/icons/location.png"></image>
+        <text class="location-text">
+          {{currentLocation.name || '选择位置'}}
+        </text>
+        <image class="arrow-icon" src="/images/icons/arrow-down.jpg"></image>
+      </view>
+      
+      <view class="search-bar">
+        <image class="search-icon" src="/images/icons/search.jpg"></image>
+        <input
+          class="search-input"
+          placeholder="搜索美食、店铺"
+          value="{{searchKeyword}}"
+          bindinput="onSearchInput"
+          bindfocus="onSearchFocus"
+          bindblur="onSearchBlur"
+          bindconfirm="onSearchConfirm"
+          confirm-type="search"
+        />
+      </view>
+    </view>
+    
+    <view class="header-actions">
+      <button class="action-btn" bindtap="onScanCode" hover-class="btn-hover">
+        <image class="action-icon" src="/images/icons/scan.jpg"></image>
+        <text class="action-text">扫码</text>
+      </button>
+      <button class="action-btn" bindtap="onMessages" hover-class="btn-hover">
+        <image class="action-icon" src="/images/icons/message.jpg"></image>
+        <text class="action-text">消息</text>
+      </button>
+      <button class="action-btn" bindtap="onMyLocation" hover-class="btn-hover">
+        <image class="action-icon" src="/images/icons/profile.jpg"></image>
+        <text class="action-text">我的</text>
+      </button>
+    </view>
+  </view>
+  
+  <!-- 搜索历史 -->
+  <view class="search-history" wx:if="{{showSearchHistory && searchHistory.length > 0}}">
+    <view class="history-header">
+      <text class="history-title">搜索历史</text>
+      <text class="clear-history" bindtap="clearSearchHistory">清除</text>
+    </view>
+    <view class="history-list">
+      <block wx:for="{{searchHistory}}" wx:key="index">
+        <view class="history-item" bindtap="onHistoryItemTap" data-keyword="{{item}}">
+          <text>{{item}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+  
+  <!-- 主要内容区域 -->
+  <scroll-view 
+    class="main-content" 
+    scroll-y="true" 
+    refresher-enabled="true" 
+    refresher-triggered="{{isRefreshing}}"
+    bindrefresherrefresh="onPullDownRefresh"
+    bindscrolltolower="onReachBottom"
+  >
+    <!-- 加载状态 -->
+    <view class="loading" wx:if="{{isLoading}}">
+      <image class="loading-icon" src="/images/loading.gif"></image>
+      <text class="loading-text">加载中...</text>
+    </view>
+    
+    <!-- 分类导航 -->
+    <view class="categories-section" wx:if="{{!isLoading && !showSearchHistory}}">
+      <text class="section-title">美食分类</text>
+      <view class="categories-grid">
+        <block wx:for="{{categories}}" wx:key="id">
+          <view class="category-item" bindtap="onCategoryTap" data-id="{{item.id}}" data-name="{{item.name}}">
+            <image class="category-icon" src="{{item.icon}}"></image>
+            <text class="category-name">{{item.name}}</text>
+          </view>
+        </block>
+      </view>
+    </view>
+    
+    <!-- 热门推荐 -->
+    <view class="hot-section" wx:if="{{!isLoading && !showSearchHistory && hotStores.length > 0}}">
+      <view class="section-header">
+        <text class="section-title">热门推荐</text>
+        <text class="section-subtitle">大家正在打卡</text>
+      </view>
+      <scroll-view class="hot-list" scroll-x="true" style="width: 100%;">
+        <block wx:for="{{hotStores}}" wx:key="store_id">
+          <view class="hot-store-item" bindtap="onStoreTap" data-store-id="{{item.store_id}}" data-store-name="{{item.name}}">
+            <image class="hot-store-image" src="{{item.image_url || '/images/mock/meiweizhongcanting.jpg'}}" mode="aspectFill"></image>
+            <view class="hot-store-info">
+              <text class="hot-store-name">{{item.name}}</text>
+              <view class="hot-store-rating">
+                <image class="star-icon" src="/images/icons/star.jpg"></image>
+                <text class="rating-text">{{item.rating}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+      </scroll-view>
+    </view>
+    
+    <!-- 附近店铺 -->
+    <view class="nearby-section" wx:if="{{!isLoading}}">
+      <view class="section-header">
+        <text class="section-title">
+          {{searchKeyword ? '搜索结果' : '附近店铺'}}
+        </text>
+        <text class="section-subtitle" wx:if="{{nearbyStores.length > 0}}">
+          共{{nearbyStores.length}}家店
+        </text>
+      </view>
+      
+      <!-- 空状态 -->
+      <view class="empty-state" wx:if="{{nearbyStores.length === 0}}">
+        <image class="empty-image" src="/images/empty/no-stores.png"></image>
+        <text class="empty-title">暂无相关店铺</text>
+        <text class="empty-subtitle">试试调整搜索条件或位置</text>
+      </view>
+      
+      <!-- 店铺列表 -->
+      <view class="stores-list" wx:else>
+        <block wx:for="{{nearbyStores}}" wx:key="store_id">
+          <view class="store-card" bindtap="onStoreTap" data-store-id="{{item.store_id}}" data-store-name="{{item.name}}">
+            <image class="store-image" src="{{item.image_url || '/images/mock/meiweizhongcanting.jpg'}}" mode="aspectFill"></image>
+            <view class="store-info">
+              <view class="store-header">
+                <text class="store-name">{{item.name}}</text>
+                <button 
+                  class="favorite-btn {{item.is_favorite ? 'favorited' : ''}}" 
+                  bindtap="onStoreFavorite"
+                  data-store-id="{{item.store_id}}"
+                  data-is-favorite="{{item.is_favorite}}"
+                  hover-class="btn-hover"
+                >
+                  <image class="favorite-icon" src="/images/icons/{{item.is_favorite ? 'heart-filled' : 'heart'}}.jpg"></image>
+                </button>
+              </view>
+              
+              <view class="store-meta">
+                <view class="rating-section">
+                  <image class="star-icon" src="/images/icons/star.jpg"></image>
+                  <text class="rating">{{item.rating}}</text>
+                  <text class="reviews">({{item.review_count || 0}})</text>
+                </view>
+                <view class="distance-section">
+                  <image class="location-icon" src="/images/icons/location-small.jpg"></image>
+                  <text class="distance">{{item.distance}}m</text>
+                </view>
+              </view>
+              
+              <view class="store-tags" wx:if="{{item.tags && item.tags.length > 0}}">
+                <block wx:for="{{item.tags}}" wx:key="index">
+                  <text class="store-tag">{{item}}</text>
+                </block>
+              </view>
+              
+              <view class="store-footer">
+                <text class="average-price">人均¥{{item.average_price || 0}}</text>
+                <text class="store-status {{item.is_open ? 'open' : 'closed'}}">
+                  {{item.is_open ? '营业中' : '已打烊'}}
+                </text>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+      
+      <!-- 加载更多提示 -->
+      <view class="load-more" wx:if="{{nearbyStores.length > 0}}">
+        <text>下拉查看更多店铺</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

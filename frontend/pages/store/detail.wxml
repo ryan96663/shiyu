@@ -1,0 +1,299 @@
+<view class="store-scene-container">
+
+  <!-- 顶部导航栏 -->
+  <view class="top-bar">
+    <navigator class="back-btn" open-type="navigateBack" delta="1">
+      <icon type="back" size="24" color="#ffffff"></icon>
+    </navigator>
+
+    <view class="store-info">
+      <text class="store-name">{{storeInfo.name}}</text>
+      <text class="online-count">在线 {{storeInfo.onlineCount}} 人</text>
+    </view>
+
+    <view class="actions">
+      <button class="action-btn" open-type="contact">
+        <icon type="service" size="20" color="#ffffff"></icon>
+        <text style="color:#ffffff;font-size:10px;display:block;">客服</text>
+      </button>
+      <button class="action-btn" open-type="share">
+        <icon type="share" size="20" color="#ffffff"></icon>
+        <text style="color:#ffffff;font-size:10px;display:block;">分享</text>
+      </button>
+      <button class="action-btn ranking-btn" bindtap="toggleRankingPanel">
+        <icon type="remind" size="20" color="#ffd700"></icon>
+        <text style="color:#ffd700;font-size:10px;display:block;">AI榜</text>
+        <view class="ranking-badge" wx:if="{{productRanking.length > 0}}">
+          <text class="badge-text">{{productRanking.length}}</text>
+        </view>
+      </button>
+      <button class="action-btn theme-btn" bindtap="onShowThemeSelector">
+        <text style="font-size:20px;">🎨</text>
+        <text style="color:#ffffff;font-size:10px;display:block;">主题</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- ★ v6.0: 场景区域（fill剩余空间）★ -->
+  <view class="scene-area">
+
+    <scroll-view class="scene-scroll" scroll-y>
+      <view class="scene-wrapper">
+
+        <!-- Layer 1: 一体化背景图 -->
+        <image
+          class="scene-bg"
+          src="/images/restaurant/scene.jpg"
+          mode="widthFix"
+        />
+
+        <!-- Layer 2: 热区覆盖层 -->
+        <block wx:for="{{hotspots}}" wx:key="id">
+          <view
+            class="hotspot"
+            style="left:{{item.left}}%; top:{{item.top}}%; width:{{item.width}}%; height:{{item.height}}%;"
+            bindtap="onTableTap"
+            data-id="{{item.id}}"
+            data-label="{{item.label}}"
+          >
+            <!-- 开发调试热区边框（上线前注释掉） -->
+            <view class="hotspot-debug"></view>
+
+            <!-- 对话气泡 -->
+            <view class="chat-bubble" wx:if="{{activeBubbleId === item.id}}">
+              <text class="bubble-text">{{activeBubbleText}}</text>
+            </view>
+
+            <!-- 发言计数标签（阿拉伯数字常驻，可点击查看历史） -->
+            <view
+              class="chat-count-badge"
+              wx:if="{{tableChatCounts[item.id] > 0}}"
+              catchtap="onCountBadgeTap"
+              data-id="{{item.id}}"
+            >
+              <text class="count-text">{{tableChatCounts[item.id]}}</text>
+            </view>
+          </view>
+        </block>
+
+      </view>
+    </scroll-view>
+
+    <!-- Demo 群聊浮动叠加层（固定于场景区底部，不随滚动移动） -->
+    <view class="demo-chat-overlay" wx:if="{{chatMessages.length > 0}}">
+      <view class="demo-chat-header">
+        <text class="demo-chat-title">💬 店内群聊 · Demo 演示中</text>
+        <text class="demo-chat-count">{{chatMessages.length}} 条</text>
+      </view>
+      <scroll-view class="demo-chat-list" scroll-y scroll-into-view="{{lastMessageId}}">
+        <block wx:for="{{chatMessages}}" wx:key="id">
+          <view class="demo-chat-item" id="{{'msg-' + item.id}}">
+            <view class="demo-chat-meta">
+              <text class="demo-chat-sender">{{item.senderName}}</text>
+              <text class="demo-chat-time">{{item.time}}</text>
+            </view>
+            <text class="demo-chat-content">{{item.content}}</text>
+          </view>
+        </block>
+      </scroll-view>
+    </view>
+
+  </view>
+
+  <!-- 弹幕开关（常驻，不受开关影响） -->
+  <view class="danmaku-toggle-bar">
+    <view class="danmaku-toggle" bindtap="toggleDanmaku">
+      <text>{{showDanmaku ? '👁️' : '👁️‍🗨️'}}</text>
+    </view>
+  </view>
+
+  <!-- 弹幕内容（仅开启时显示） -->
+  <view class="danmaku-bar" wx:if="{{showDanmaku && danmakuMessages.length > 0}}">
+    <swiper class="danmaku-swiper" autoplay vertical circular interval="2000" duration="500">
+      <block wx:for="{{danmakuMessages}}" wx:key="id">
+        <swiper-item>
+          <view class="danmaku-item">
+            <text class="danmaku-text">{{item.content}}</text>
+          </view>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+
+  <!-- 互动按钮栏 -->
+  <view class="interaction-bar">
+    <view class="interaction-btn greeting-btn" bindtap="onGreetingClick">
+      <image class="interaction-icon" src="/images/icons/message.jpg"></image>
+      <text class="interaction-label">打招呼</text>
+    </view>
+    <view class="interaction-divider"></view>
+    <view class="interaction-btn throw-bottle-btn" bindtap="onThrowBottleClick">
+      <text class="interaction-emoji">🧃</text>
+      <text class="interaction-label">丢漂流瓶</text>
+    </view>
+    <view class="interaction-divider"></view>
+    <view class="interaction-btn pick-bottle-btn" bindtap="onPickBottleClick">
+      <text class="interaction-emoji">🫧</text>
+      <text class="interaction-label">捡漂流瓶</text>
+    </view>
+  </view>
+
+  <!-- 底部工具栏 -->
+  <view class="bottom-toolbar">
+    <button class="toolbar-btn chat-btn" bindtap="onOpenChat">
+      <icon type="message" size="20" color="#ff6b35"></icon>
+      <text class="btn-label">聊天</text>
+    </button>
+    <button class="toolbar-btn menu-btn" bindtap="onMenuClick">
+      <icon type="apps" size="20" color="#ff6b35"></icon>
+      <text class="btn-label">点餐</text>
+    </button>
+    <button class="toolbar-btn exit-btn" bindtap="onExitStore" wx:if="{{isInsideStore}}">
+      <icon type="close" size="20" color="#f56c6c"></icon>
+      <text class="btn-label">离店</text>
+    </button>
+    <button class="toolbar-btn join-btn" bindtap="onJoinGroup" wx:elif="{{!isInsideStore}}">
+      <icon type="add" size="20" color="#07c160"></icon>
+      <text class="btn-label">进店</text>
+    </button>
+  </view>
+
+  <!-- Toast -->
+  <view class="toast" wx:if="{{showToast}}">
+    <text class="toast-text">{{toastMessage}}</text>
+  </view>
+
+  <!-- 主题选择器面板 -->
+  <view class="theme-panel" wx:if="{{showThemeSelector}}">
+    <view class="theme-panel-mask" bindtap="onCloseThemeSelector"></view>
+    <view class="theme-panel-content">
+      <view class="theme-panel-header">
+        <text class="theme-panel-title">🎨 选择餐厅风格</text>
+        <view class="theme-panel-close" bindtap="onCloseThemeSelector">
+          <text>✕</text>
+        </view>
+      </view>
+      <view class="theme-list">
+        <view
+          class="theme-item {{currentRestaurantType === 'sichuan' ? 'theme-item--active' : ''}}"
+          bindtap="quickSwitchType"
+          data-type="sichuan"
+        >
+          <view class="theme-preview sichuan-preview"></view>
+          <view class="theme-info">
+            <text class="theme-name">🥘 川菜小馆</text>
+            <text class="theme-desc">温馨家常 · 棕色调</text>
+          </view>
+          <text class="theme-check" wx:if="{{currentRestaurantType === 'sichuan'}}">✓</text>
+        </view>
+        <view
+          class="theme-item {{currentRestaurantType === 'cantonese' ? 'theme-item--active' : ''}}"
+          bindtap="quickSwitchType"
+          data-type="cantonese"
+        >
+          <view class="theme-preview cantonese-preview"></view>
+          <view class="theme-info">
+            <text class="theme-name">☕ 粤式茶餐厅</text>
+            <text class="theme-desc">时尚港风 · 石板灰</text>
+          </view>
+          <text class="theme-check" wx:if="{{currentRestaurantType === 'cantonese'}}">✓</text>
+        </view>
+        <view
+          class="theme-item {{currentRestaurantType === 'japanese' ? 'theme-item--active' : ''}}"
+          bindtap="quickSwitchType"
+          data-type="japanese"
+        >
+          <view class="theme-preview ramen-preview"></view>
+          <view class="theme-info">
+            <text class="theme-name">🍜 日式拉面馆</text>
+            <text class="theme-desc">极简干净 · 深灰调</text>
+          </view>
+          <text class="theme-check" wx:if="{{currentRestaurantType === 'japanese'}}">✓</text>
+        </view>
+        <view
+          class="theme-item {{currentRestaurantType === 'bbq' ? 'theme-item--active' : ''}}"
+          bindtap="quickSwitchType"
+          data-type="bbq"
+        >
+          <view class="theme-preview bbq-preview"></view>
+          <view class="theme-info">
+            <text class="theme-name">🍖 烧烤店</text>
+            <text class="theme-desc">深夜热闹 · 暗黑色</text>
+          </view>
+          <text class="theme-check" wx:if="{{currentRestaurantType === 'bbq'}}">✓</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 桌位发言历史面板 -->
+  <view class="table-panel" wx:if="{{showTablePanel}}">
+    <view class="table-panel-mask" bindtap="closeTablePanel"></view>
+    <view class="table-panel-content">
+      <view class="table-panel-header">
+        <text class="table-panel-title">💬 {{tablePanelLabel}} 发言记录</text>
+        <view class="table-panel-close" bindtap="closeTablePanel">
+          <text>✕</text>
+        </view>
+      </view>
+      <scroll-view class="table-panel-list" scroll-y>
+        <block wx:for="{{tablePanelMessages}}" wx:key="id">
+          <view class="table-panel-item">
+            <view class="table-panel-meta">
+              <text class="table-panel-time">{{item.time}}</text>
+            </view>
+            <text class="table-panel-msg">{{item.content}}</text>
+          </view>
+        </block>
+        <view class="table-panel-empty" wx:if="{{tablePanelMessages.length === 0}}">
+          <text>暂无发言记录</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- AI产品榜单面板 -->
+  <view class="ranking-panel" wx:if="{{showRankingPanel}}">
+    <view class="panel-header">
+      <text class="panel-title">🏆 AI产品推荐榜</text>
+      <text class="update-time" wx:if="{{rankingLastUpdate}}">更新时间: {{rankingLastUpdate}}</text>
+      <button class="close-btn" bindtap="toggleRankingPanel">
+        <icon type="clear" size="20" color="#666666"></icon>
+      </button>
+    </view>
+
+    <scroll-view class="ranking-list" scroll-y>
+      <block wx:if="{{productRanking.length === 0}}">
+        <view class="empty-state">
+          <text class="empty-text">🤖 AI正在收集顾客评价...</text>
+          <text class="empty-hint">快和其他顾客聊天推荐美食吧！</text>
+        </view>
+      </block>
+
+      <block wx:for="{{productRanking}}" wx:key="type">
+        <view class="ranking-item">
+          <view class="rank-info">
+            <text class="rank-number">NO.{{index + 1}}</text>
+            <text class="product-type">{{item.type}}</text>
+            <text class="positive-rate">好评率 {{item.positiveRate}}%</text>
+          </view>
+
+          <view class="reasons-section" wx:if="{{item.reason.length > 0}}">
+            <text class="reasons-title">推荐理由：</text>
+            <view class="reasons-list">
+              <block wx:for="{{item.reason}}" wx:key="reason">
+                <text class="reason-item">• {{item}}</text>
+              </block>
+            </view>
+          </view>
+
+          <view class="stats-info">
+            <text class="review-count">收到 {{item.totalReviews}} 条评价</text>
+            <text class="positive-count">其中 {{item.positiveReviews}} 条好评</text>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+
+</view>

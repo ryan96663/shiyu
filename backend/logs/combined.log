@@ -1,0 +1,51 @@
+{"level":"info","message":"Socket.io服务已初始化","service":"foodie-social","timestamp":"2026-05-31T13:18:42.429Z"}
+{"level":"info","message":"定时任务服务已初始化","service":"foodie-social","timestamp":"2026-05-31T13:18:42.430Z"}
+{"level":"warn","message":"MongoDB连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-05-31T13:18:45.449Z"}
+{"level":"warn","message":"Redis连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-05-31T13:18:45.453Z"}
+{"level":"info","message":"服务器启动成功，监听端口: 3000","service":"foodie-social","timestamp":"2026-05-31T13:18:45.454Z"}
+{"level":"info","message":"环境: development","service":"foodie-social","timestamp":"2026-05-31T13:18:45.454Z"}
+{"level":"info","message":"API文档: http://localhost:3000/api/docs","service":"foodie-social","timestamp":"2026-05-31T13:18:45.455Z"}
+{"level":"info","message":"收到SIGINT信号，正在关闭服务器...","service":"foodie-social","timestamp":"2026-05-31T15:18:06.987Z"}
+{"level":"info","message":"Socket.io服务已初始化","service":"foodie-social","timestamp":"2026-05-31T15:18:35.843Z"}
+{"level":"info","message":"定时任务服务已初始化","service":"foodie-social","timestamp":"2026-05-31T15:18:35.844Z"}
+{"level":"warn","message":"MongoDB连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-05-31T15:18:38.857Z"}
+{"level":"warn","message":"Redis连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-05-31T15:18:38.861Z"}
+{"level":"info","message":"服务器启动成功，监听端口: 3000","service":"foodie-social","timestamp":"2026-05-31T15:18:38.863Z"}
+{"level":"info","message":"环境: development","service":"foodie-social","timestamp":"2026-05-31T15:18:38.865Z"}
+{"level":"info","message":"API文档: http://localhost:3000/api/docs","service":"foodie-social","timestamp":"2026-05-31T15:18:38.866Z"}
+{"level":"info","message":"收到SIGINT信号，正在关闭服务器...","service":"foodie-social","timestamp":"2026-05-31T15:30:35.244Z"}
+{"level":"info","message":"Socket.io服务已初始化","service":"foodie-social","timestamp":"2026-05-31T15:30:46.615Z"}
+{"level":"info","message":"定时任务服务已初始化","service":"foodie-social","timestamp":"2026-05-31T15:30:46.617Z"}
+{"level":"warn","message":"MongoDB连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-05-31T15:30:49.641Z"}
+{"level":"warn","message":"Redis连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-05-31T15:30:49.645Z"}
+{"level":"info","message":"服务器启动成功，监听端口: 3000","service":"foodie-social","timestamp":"2026-05-31T15:30:49.647Z"}
+{"level":"info","message":"环境: development","service":"foodie-social","timestamp":"2026-05-31T15:30:49.647Z"}
+{"level":"info","message":"API文档: http://localhost:3000/api/docs","service":"foodie-social","timestamp":"2026-05-31T15:30:49.648Z"}
+{"level":"info","message":"Socket.io服务已初始化","service":"foodie-social","timestamp":"2026-06-01T06:15:24.296Z"}
+{"level":"info","message":"定时任务服务已初始化","service":"foodie-social","timestamp":"2026-06-01T06:15:24.298Z"}
+{"level":"warn","message":"MongoDB连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-06-01T06:15:27.324Z"}
+{"level":"warn","message":"Redis连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-06-01T06:15:27.329Z"}
+{"level":"info","message":"服务器启动成功，监听端口: 3000","service":"foodie-social","timestamp":"2026-06-01T06:15:27.330Z"}
+{"level":"info","message":"环境: development","service":"foodie-social","timestamp":"2026-06-01T06:15:27.331Z"}
+{"level":"info","message":"API文档: http://localhost:3000/api/docs","service":"foodie-social","timestamp":"2026-06-01T06:15:27.331Z"}
+{"level":"info","message":"Socket.io服务已初始化","service":"foodie-social","timestamp":"2026-06-02T06:55:19.006Z"}
+{"level":"info","message":"定时任务服务已初始化","service":"foodie-social","timestamp":"2026-06-02T06:55:19.008Z"}
+{"level":"warn","message":"MongoDB连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-06-02T06:55:22.034Z"}
+{"level":"warn","message":"Redis连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-06-02T06:55:22.039Z"}
+{"level":"info","message":"服务器启动成功，监听端口: 3000","service":"foodie-social","timestamp":"2026-06-02T06:55:22.042Z"}
+{"level":"info","message":"环境: development","service":"foodie-social","timestamp":"2026-06-02T06:55:22.043Z"}
+{"level":"info","message":"API文档: http://localhost:3000/api/docs","service":"foodie-social","timestamp":"2026-06-02T06:55:22.043Z"}
+{"level":"info","message":"Socket.io服务已初始化","service":"foodie-social","timestamp":"2026-06-03T01:34:07.128Z"}
+{"level":"info","message":"定时任务服务已初始化","service":"foodie-social","timestamp":"2026-06-03T01:34:07.132Z"}
+{"level":"warn","message":"MongoDB连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-06-03T01:34:10.162Z"}
+{"level":"warn","message":"Redis连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-06-03T01:34:10.168Z"}
+{"level":"info","message":"服务器启动成功，监听端口: 3000","service":"foodie-social","timestamp":"2026-06-03T01:34:10.174Z"}
+{"level":"info","message":"环境: development","service":"foodie-social","timestamp":"2026-06-03T01:34:10.175Z"}
+{"level":"info","message":"API文档: http://localhost:3000/api/docs","service":"foodie-social","timestamp":"2026-06-03T01:34:10.175Z"}
+{"level":"info","message":"Socket.io服务已初始化","service":"foodie-social","timestamp":"2026-06-07T15:48:11.200Z"}
+{"level":"info","message":"定时任务服务已初始化","service":"foodie-social","timestamp":"2026-06-07T15:48:11.201Z"}
+{"level":"warn","message":"MongoDB连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-06-07T15:48:14.226Z"}
+{"level":"warn","message":"Redis连接失败（使用内存存储继续运行）:","service":"foodie-social","timestamp":"2026-06-07T15:48:14.231Z"}
+{"level":"info","message":"服务器启动成功，监听端口: 3000","service":"foodie-social","timestamp":"2026-06-07T15:48:14.234Z"}
+{"level":"info","message":"环境: development","service":"foodie-social","timestamp":"2026-06-07T15:48:14.234Z"}
+{"level":"info","message":"API文档: http://localhost:3000/api/docs","service":"foodie-social","timestamp":"2026-06-07T15:48:14.235Z"}

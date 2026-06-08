@@ -1,0 +1,242 @@
+<view class="group-chat-container">
+  <!-- 群聊头部信息 -->
+  <view class="chat-header">
+    <view class="store-info">
+      <text class="store-name">{{storeInfo.name}}</text>
+      <text class="member-count">
+        <icon type="people" size="16" color="#999999"></icon>
+        {{memberCount}}人在线
+      </text>
+    </view>
+    
+    <view class="header-actions">
+      <button class="action-btn" open-type="share">
+        <icon type="share" size="20" color="#666666"></icon>
+      </button>
+      
+      <button class="action-btn" bindtap="showGroupInfo">
+        <icon type="info" size="20" color="#666666"></icon>
+      </button>
+    </view>
+  </view>
+
+  <!-- 消息列表 -->
+  <scroll-view 
+    class="message-list"
+    scroll-y
+    scroll-into-view="{{lastMessageId}}"
+    scroll-with-animation="{{true}}"
+    refresher-enabled="{{true}}"
+    refresher-triggered="{{refresherTriggered}}"
+    bindrefresherrefresh="onRefresh">
+    
+    <!-- 加载更多提示 -->
+    <view class="load-more" wx:if="{{hasMoreMessages}}">
+      <button 
+        class="load-more-btn"
+        loading="{{loadingMore}}"
+        bindtap="loadMoreMessages">
+        {{loadingMore ? '加载中...' : '加载更多消息'}}
+      </button>
+    </view>
+    
+    <!-- 消息列表 -->
+    <block wx:for="{{messages}}" wx:key="id">
+      <!-- 系统消息 -->
+      <view class="message-item system-message" wx:if="{{item.type === 'system'}}">
+        <view class="system-message-content">
+          <text>{{item.content}}</text>
+        </view>
+      </view>
+      
+      <!-- 用户消息 -->
+      <view class="message-item user-message" wx:elif="{{item.type === 'user'}}">
+        <!-- 时间分割线 -->
+        <view class="time-divider" wx:if="{{item.showTimeDivider}}">
+          <text class="time-text">{{item.time}}</text>
+        </view>
+        
+        <!-- 置顶消息标识 -->
+        <view class="pin-indicator" wx:if="{{item.isPinned}}">
+          <icon type="flag" size="14" color="#ff6b35"></icon>
+          <text>置顶消息</text>
+        </view>
+        
+        <!-- 用户信息 -->
+        <view class="user-info">
+          <text class="username">
+            {{item.isAnonymous ? '匿名用户' : item.senderName}}
+          </text>
+          
+          <text class="message-time">{{item.time}}</text>
+          
+          <!-- 桌号标识 -->
+          <text class="table-number" wx:if="{{item.tableNumber}}">
+            {{item.tableNumber}}桌
+          </text>
+          
+          <!-- 消息标签 -->
+          <view class="message-tags" wx:if="{{item.tags && item.tags.length > 0}}">
+            <block wx:for="{{item.tags}}" wx:key="name">
+              <text class="message-tag {{item}}">{{item}}</text>
+            </block>
+          </view>
+        </view>
+        
+        <!-- 消息内容 -->
+        <view class="message-content">
+          <!-- 文本消息 -->
+          <text class="text-message" wx:if="{{item.contentType === 'text'}}">
+            {{item.content}}
+          </text>
+          
+          <!-- 菜品评价消息 -->
+          <view class="dish-review" wx:if="{{item.contentType === 'review'}}">
+            <view class="dish-header">
+              <image 
+                class="dish-image" 
+                src="{{item.dishImage}}" 
+                mode="aspectFill">
+              </image>
+              
+              <view class="dish-info">
+                <text class="dish-name">{{item.dishName}}</text>
+                <view class="dish-rating">
+                  <text>评分: {{item.rating}}/5</text>
+                  <view class="stars">
+                    <block wx:for="{{[1,2,3,4,5]}}" wx:key="index">
+                      <icon 
+                        type="star" 
+                        size="12" 
+                        color="{{index <= item.rating ? '#fadb14' : '#e8e8e8'}}">
+                      </icon>
+                    </block>
+                  </view>
+                </view>
+              </view>
+            </view>
+            
+            <text class="review-content">{{item.reviewText}}</text>
+            <text class="review-time">评价于 {{item.reviewTime}}</text>
+          </view>
+        </view>
+        
+        <!-- 消息操作按钮 -->
+        <view class="message-actions" wx:if="{{item.actionsEnabled}}">
+          <button 
+            class="action-btn reply-btn"
+            size="mini"
+            bindtap="replyToMessage"
+            data-message-id="{{item.id}}">
+            回复
+          </button>
+        </view>
+      </view>
+    </block>
+    
+    <!-- 空消息提示 -->
+    <view class="empty-state" wx:if="{{messages.length === 0}}">
+      <icon type="chat" size="48" color="#cccccc"></icon>
+      <text class="empty-text">暂无群聊消息</text>
+      <text class="empty-subtext">快来和大家打个招呼吧！</text>
+    </view>
+  </scroll-view>
+
+  <!-- 底部输入区域 -->
+  <view class="input-area">
+    <!-- 匿名开关 -->
+    <view class="anonymous-toggle">
+      <switch 
+        checked="{{isAnonymous}}"
+        bindchange="toggleAnonymous"
+        color="#ff6b35" />
+      <text class="anonymous-label">匿名发言</text>
+    </view>
+    
+    <!-- 输入框 -->
+    <view class="input-wrapper">
+      <input 
+        class="message-input"
+        placeholder="说点什么..."
+        placeholder-style="color: #cccccc;"
+        value="{{messageInput}}"
+        bindinput="onMessageInput"
+        bindconfirm="sendMessage"
+        confirm-type="send"
+        cursor-spacing="10"
+        maxlength="500"
+      />
+      
+      <button 
+        class="emoji-btn"
+        bindtap="showEmojiPanel">
+        <icon type="emoji" size="24" color="#999999"></icon>
+      </button>
+      
+      <button 
+        class="send-btn" 
+        bindtap="sendMessage"
+        disabled="{{!messageInput.trim()}}">
+        发送
+      </button>
+    </view>
+    
+    <!-- 快速操作按钮 -->
+    <view class="quick-actions">
+      <button 
+        class="quick-action-btn"
+        bindtap="sendGreeting">
+        <icon type="thumb-up" size="20" color="#ff6b35"></icon>
+        <text>打招呼</text>
+      </button>
+      
+      <button 
+        class="quick-action-btn"
+        bindtap="sendDishRecommendation"
+        open-type="share">
+        <icon type="star" size="20" color="#fadb14"></icon>
+        <text>推荐菜品</text>
+      </button>
+      
+      <button 
+        class="quick-action-btn"
+        bindtap="sendBottle">
+        <icon type="redpacket" size="20" color="#07c160"></icon>
+        <text>扔漂流瓶</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 表情面板 -->
+  <view class="emoji-panel" wx:if="{{showEmojiPanel}}">
+    <scroll-view class="emoji-grid" scroll-y>
+      <block wx:for="{{emojiList}}" wx:key="symbol">
+        <text 
+          class="emoji-item"
+          bindtap="insertEmoji"
+          data-emoji="{{item}}">
+          {{item}}
+        </text>
+      </block>
+    </scroll-view>
+    
+    <view class="emoji-actions">
+      <button 
+        class="emoji-action-btn" 
+        bindtap="hideEmojiPanel">
+        收起
+      </button>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <loading type="circular" size="24" color="#ff6b35"></loading>
+    <text class="loading-text">{{loadingText}}</text>
+  </view>
+
+  <!-- 错误提示 -->
+  <view class="error-toast" wx:if="{{showError}}">
+    <text class="error-text">{{errorMessage}}</text>
+  </view>
+</view>

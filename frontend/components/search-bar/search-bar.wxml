@@ -1,0 +1,77 @@
+<view class="search-bar">
+  <view class="search-container {{focus ? 'focused' : ''}} {{disabled ? 'disabled' : ''}}">
+    <!-- 搜索图标 -->
+    <icon 
+      type="search" 
+      size="20" 
+      color="{{focus ? '#ff6b35' : '#999999'}}" 
+      class="search-icon">
+    </icon>
+    
+    <!-- 输入框 -->
+    <input 
+      class="search-input"
+      type="text"
+      placeholder="{{placeholder}}"
+      placeholder-style="color: #999999;"
+      value="{{value}}"
+      focus="{{focus}}"
+      disabled="{{disabled}}"
+      bindinput="onInput"
+      bindfocus="onFocus"
+      bindblur="onBlur"
+      bindconfirm="onConfirm"
+      confirm-type="search"
+      maxlength="{{maxlength}}"
+    />
+    
+    <!-- 清除按钮 -->
+    <button 
+      class="clear-btn"
+      wx:if="{{showClearButton && value.length > 0}}"
+      bindtap="onClear"
+      hover-class="clear-btn-hover">
+      <icon type="clear" size="16" color="#999999"></icon>
+    </button>
+    
+    <!-- 搜索按钮 -->
+    <button 
+      class="search-btn"
+      wx:if="{{showSearchButton}}"
+      bindtap="onSearch"
+      hover-class="search-btn-hover">
+      搜索
+    </button>
+  </view>
+  
+  <!-- 搜索建议 -->
+  <view class="search-suggestions" wx:if="{{showSuggestions && suggestions.length > 0}}">
+    <scroll-view class="suggestion-list" scroll-y>
+      <block wx:for="{{suggestions}}" wx:key="value">
+        <view 
+          class="suggestion-item"
+          bindtap="onSuggestionTap"
+          data-suggestion="{{item}}">
+          <icon type="search" size="16" color="#cccccc" class="suggestion-icon"></icon>
+          <text class="suggestion-text">{{item.text}}</text>
+          <text class="suggestion-desc" wx:if="{{item.description}}">{{item.description}}</text>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+  
+  <!-- 快速标签 -->
+  <view class="quick-tags" wx:if="{{showQuickTags && quickTags.length > 0}}">
+    <scroll-view class="tag-list" scroll-x>
+      <block wx:for="{{quickTags}}" wx:key="value">
+        <button 
+          class="quick-tag {{activeTag === item.value ? 'active' : ''}}"
+          bindtap="onTagTap"
+          data-tag="{{item}}"
+          size="mini">
+          {{item.text}}
+        </button>
+      </block>
+    </scroll-view>
+  </view>
+</view>

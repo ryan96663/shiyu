@@ -1,0 +1,204 @@
+<view class="profile-container">
+  <!-- 顶部导航栏 -->
+  <view class="top-bar">
+    <view class="title">个人中心</view>
+    <button class="edit-btn" bindtap="navigateToEdit">编辑</button>
+  </view>
+
+  <!-- 主要内容区 -->
+  <scroll-view class="content-scroll" scroll-y>
+    <view class="profile-content">
+      <!-- 用户卡片 -->
+      <view class="user-card">
+        <view class="user-info">
+          <image class="user-avatar" src="{{userInfo.avatar || 'https://via.placeholder.com/80'}}" mode="aspectFill"></image>
+          <view class="user-details">
+            <text class="user-name">{{userInfo.displayName || '未设置名称'}}</text>
+            <text class="user-area">{{userInfo.area}}</text>
+            <text class="user-since" wx:if="{{userInfo.joinDate}}">加入时间: {{formatTime(userInfo.joinDate)}}</text>
+          </view>
+        </view>
+        
+        <view class="user-id-section" bindtap="copyUserId">
+          <text class="user-id-label">ID: {{userInfo.id}}</text>
+          <text class="copy-tip">点击复制</text>
+        </view>
+      </view>
+
+      <!-- 统计数字卡片 -->
+      <view class="stats-grid">
+        <view class="stat-item">
+          <text class="stat-number">{{userInfo.stats.reviews || 0}}</text>
+          <text class="stat-label">发出评价</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{userInfo.stats.receivedReviews || 0}}</text>
+          <text class="stat-label">收到评价</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{userInfo.stats.averageRating || 0}}</text>
+          <text class="stat-label">平均评分</text>
+        </view>
+      </view>
+
+      <!-- 社交数据卡片 -->
+      <view class="social-stats">
+        <view class="social-item">
+          <text class="social-label">漂流瓶</text>
+          <view class="social-values">
+            <text class="social-value">扔出{{userInfo.stats.bottlesThrown || 0}}</text>
+            <text class="social-value">捞到{{userInfo.stats.bottlesPicked || 0}}</text>
+          </view>
+        </view>
+        
+        <view class="social-item">
+          <text class="social-label">群组</text>
+          <text class="social-value">{{userInfo.stats.groupsJoined || 0}}个群聊</text>
+        </view>
+        
+        <view class="social-item">
+          <text class="social-label">互动</text>
+          <text class="social-value">获赞{{userInfo.stats.totalLikes || 0}}</text>
+        </view>
+      </view>
+
+      <!-- 快捷操作 -->
+      <view class="quick-actions">
+        <button class="action-btn" bindtap="goToBottleList">
+          <icon type="search" size="24" color="#409eff"></icon>
+          <text class="action-text">漂流瓶管理</text>
+        </button>
+        
+        <button class="action-btn" bindtap="goToRankings">
+          <icon type="medal" size="24" color="#ff6b35"></icon>
+          <text class="action-text">排行榜</text>
+        </button>
+        
+        <button class="action-btn" bindtap="goToGroupHistory">
+          <icon type="time" size="24" color="#67c23a"></icon>
+          <text class="action-text">群聊历史</text>
+        </button>
+        
+        <button class="action-btn" bindtap="goToFeedback">
+          <icon type="message" size="24" color="#f56c6c"></icon>
+          <text class="action-text">意见反馈</text>
+        </button>
+      </view>
+
+      <!-- 评价标签切换 -->
+      <view class="tab-section">
+        <view class="tab-header">
+          <button class="tab-btn {{tabIndex === 0 ? 'active' : ''}}" data-index="0" bindtap="switchToMyReviews">
+            我的评价
+            <text class="tab-count" wx:if="{{myReviews.length > 0}}">{{myReviews.length}}</text>
+          </button>
+          
+          <button class="tab-btn {{tabIndex === 1 ? 'active' : ''}}" data-index="1" bindtap="switchToReceivedReviews">
+            收到的评价
+            <text class="tab-count" wx:if="{{receivedReviews.length > 0}}">{{receivedReviews.length}}</text>
+          </button>
+        </view>
+
+        <!-- 我的评价列表 -->
+        <view class="reviews-container" wx:if="{{tabIndex === 0}}">
+          <block wx:if="{{myReviews.length > 0}}">
+            <block wx:for="{{myReviews}}" wx:key="id">
+              <view class="review-item">
+                <view class="review-header">
+                  <view class="review-info">
+                    <text class="review-rating">
+                      {{renderStars(item.rating)}} {{item.rating}}.0
+                    </text>
+                    <text class="review-target">{{item.targetType === 'user' ? '用户' : '店铺'}}：{{item.targetName || item.targetId}}</text>
+                  </view>
+                  
+                  <button 
+                    class="delete-btn" 
+                    data-review-id="{{item.id}}"
+                    bindtap="onDeleteReview"
+                    wx:if="{{item.userId === userInfo.id}}">
+                    删除
+                  </button>
+                </view>
+                
+                <text class="review-content">{{item.content}}</text>
+                
+                <view class="review-tags" wx:if="{{item.tags && item.tags.length > 0}}">
+                  <block wx:for="{{item.tags}}" wx:key="index">
+                    <text class="tag">{{item}}</text>
+                  </block>
+                </view>
+                
+                <view class="review-footer">
+                  <text class="review-time">{{formatTime(item.createdAt)}}</text>
+                  <text class="review-likes" wx:if="{{item.likes > 0}}">
+                    {{item.likes}} 赞
+                  </text>
+                </view>
+              </view>
+            </block>
+          </block>
+          
+          <view class="empty-reviews" wx:elif="{{myReviews.length === 0}}">
+            <text class="empty-text">还没有发布过评价</text>
+            <text class="empty-tip">快去群组中给其他用户评价吧</text>
+          </view>
+        </view>
+
+        <!-- 收到的评价列表 -->
+        <view class="reviews-container" wx:if="{{tabIndex === 1}}">
+          <block wx:if="{{receivedReviews.length > 0}}">
+            <block wx:for="{{receivedReviews}}" wx:key="id">
+              <view class="review-item">
+                <view class="review-header">
+                  <view class="review-info">
+                    <text class="review-rating">
+                      {{renderStars(item.rating)}} {{item.rating}}.0
+                    </text>
+                    <text class="review-author">来自：{{item.userName}}</text>
+                  </view>
+                </view>
+                
+                <text class="review-content">{{item.content}}</text>
+                
+                <view class="review-tags" wx:if="{{item.tags && item.tags.length > 0}}">
+                  <block wx:for="{{item.tags}}" wx:key="index">
+                    <text class="tag">{{item}}</text>
+                  </block>
+                </view>
+                
+                <view class="review-footer">
+                  <text class="review-time">{{formatTime(item.createdAt)}}</text>
+                  <text class="review-likes" wx:if="{{item.likes > 0}}">
+                    {{item.likes}} 赞
+                  </text>
+                </view>
+              </view>
+            </block>
+          </block>
+          
+          <view class="empty-reviews" wx:elif="{{receivedReviews.length === 0}}">
+            <text class="empty-text">还没有收到评价</text>
+            <text class="empty-tip">积极参与群组互动，让其他人认识你</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 底部设置 -->
+      <view class="settings-section">
+        <button class="logout-btn" bindtap="onLogout">退出登录</button>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <loading type="circular" size="30" color="#ff6b35"></loading>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 提示信息 -->
+  <view class="toast" wx:if="{{showToast}}">
+    <text class="toast-text">{{toastMessage}}</text>
+  </view>
+</view>

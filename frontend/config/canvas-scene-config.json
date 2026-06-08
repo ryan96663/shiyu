@@ -1,0 +1,143 @@
+{
+  "CANVAS_SCENE_CONFIG": {
+    "version": "1.0",
+    "lastModified": "2026-06-02",
+    
+    "workspaceConfig": {
+      "basePath": "/images/",
+      "spritePath": "/images/sprites/",
+      "elementsPath": "/images/elements/",
+      "backgroundPath": "/images/backgrounds/"
+    },
+
+    "canvasSettings": {
+      "defaultWidth": 1024,
+      "defaultHeight": 768,
+      "maxWidth": 2048,
+      "maxHeight": 1536,
+      "scrollable": true,
+      "virtualCanvas": true
+    },
+
+    "sceneLayout": {
+      "restaurantType": "川菜小馆",
+      "description": "温馨家常菜氛围,普通小馆子感觉,主要做川菜家常菜",
+      
+      "tableLayout": {
+        "totalCount": 8,
+        "occupiedCount": 6,
+        "emptyCount": 2,
+        "arrangement": {
+          "rows": 3,
+          "perRow": 3,
+          "spacing": {
+            "horizontal": 180,
+            "vertical": 150
+          }
+        },
+        "dimensions": {
+          "width": 120,
+          "height": 80,
+          "style": "rectangular"
+        }
+      },
+
+      "characterSetup": {
+        "availableCharacters": [
+          {
+            "id": "man-01",
+            "name": "男性角色1",
+            "type": "adult",
+            "fileName": "man-01.png",
+            "size": { "width": 64, "height": 64 }
+          },
+          {
+            "id": "woman-01", 
+            "name": "女性角色1",
+            "type": "adult",
+            "fileName": "woman-01.png",
+            "size": { "width": 64, "height": 64 }
+          },
+          {
+            "id": "woman-02",
+            "name": "女性角色2",
+            "type": "adult", 
+            "fileName": "woman-02.png",
+            "size": { "width": 64, "height": 64 }
+          }
+        ],
+        "distribution": {
+          "minPerTable": 1,
+          "maxPerTable": 3,
+          "randomSelection": true,
+          "reuseCharacters": true
+        }
+      },
+
+      "frontDesk": {
+        "position": { "x": 750, "y": 100 },
+        "size": { "width": 150, "height": 60 },
+        "waiter": {
+          "position": { "x": 780, "y": 120 },
+          "size": { "width": 60, "height": 80 },
+          "fileName": "waiter-avatar.png"
+        }
+      },
+
+      "decorations": {
+        "ceilingLights": {
+          "count": 3,
+          "positions": [ { "x": 200, "y": 150 }, { "x": 400, "y": 150 }, { "x": 600, "y": 150 } ],
+          "style": "chandelier"
+        },
+        "floorDesign": {
+          "type": "checkerboard",
+          "tileSize": 32,
+          "colors": ["#D2B48C", "#F5DEB3"],
+          "opacity": 0.3
+        },
+        "tableLamps": {
+          "enabled": true,
+          "size": 8,
+          "effectRadius": 30
+        }
+      }
+    },
+
+    "performance": {
+      "maxCharactersOnScreen": 20,
+      "imageCacheSize": 50,
+      "renderMode": "layered",
+      "enableScrolling": true,
+      "virtualScrolling": {
+        "enabled": true,
+        "bufferZone": 100
+      }
+    },
+
+    "themes": {
+      "default": "川菜小馆",
+      "available": [
+        "川菜小馆",
+        "粤式茶餐厅", 
+        "日式拉面馆",
+        "烧烤店"
+      ],
+      "switchMethod": "smooth"
+    },
+
+    "fallbackConfig": {
+      "imageLoadingTimeout": 5000,
+      "useFallbackGraphics": true,
+      "fallbackGraphicsQuality": "medium",
+      "errorHandling": "graceful"
+    },
+
+    "testing": {
+      "debugMode": false,
+      "showBoundingBoxes": false,
+      "performanceMonitor": false,
+      "assetLoadLogging": false
+    }
+  }
+}

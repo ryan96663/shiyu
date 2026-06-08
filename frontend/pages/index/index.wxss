@@ -1,0 +1,469 @@
+/**
+ * 首页 - 店铺发现和搜索
+ * @author Foodie Social Team
+ */
+
+/* === 容器 === */
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+}
+
+/* === 顶部搜索区 === */
+.header {
+  background-color: #ff6b35;
+  padding: 20rpx 24rpx;
+  padding-top: calc(20rpx + env(safe-area-inset-top));
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.search-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+/* 位置选择器 */
+.location {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.location-icon {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.arrow-icon {
+  width: 20rpx;
+  height: 20rpx;
+}
+
+.location-text {
+  color: #ffffff;
+  font-size: 26rpx;
+  font-weight: 500;
+  max-width: 200rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 搜索栏 */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 32rpx;
+  height: 64rpx;
+  padding: 0 16rpx;
+  gap: 10rpx;
+}
+
+.search-icon {
+  width: 32rpx;
+  height: 32rpx;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  height: 100%;
+  font-size: 26rpx;
+  color: #333333;
+  background: transparent;
+}
+
+/* 右侧操作按钮 */
+.header-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.header-actions .action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rpx;
+  padding: 6rpx 10rpx;
+  border-radius: 8rpx;
+}
+
+.header-actions .action-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.header-actions .action-text {
+  color: #ffffff;
+  font-size: 18rpx;
+}
+
+/* === 搜索历史 === */
+.search-history {
+  background-color: #ffffff;
+  padding: 20rpx 24rpx;
+  border-bottom: 1rpx solid #eeeeee;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.history-title {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #333333;
+}
+
+.clear-history {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.history-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.history-item {
+  padding: 8rpx 20rpx;
+  background-color: #f5f5f5;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  color: #666666;
+}
+
+/* === 主内容滚动区 === */
+.main-content {
+  flex: 1;
+  height: 0;
+}
+
+/* === 加载状态 === */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.loading-icon {
+  width: 80rpx;
+  height: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.loading-text {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+/* === 分类导航 === */
+.categories-section {
+  background-color: #ffffff;
+  margin: 16rpx 20rpx;
+  border-radius: 16rpx;
+  padding: 20rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 20rpx;
+}
+
+.categories-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.category-item {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  padding: 16rpx 0;
+}
+
+.category-icon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background-color: #fff5f0;
+}
+
+.category-name {
+  font-size: 22rpx;
+  color: #666666;
+}
+
+/* === 热门推荐 === */
+.hot-section {
+  margin: 0 20rpx 16rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 16rpx;
+  padding: 0 4rpx;
+}
+
+.section-subtitle {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.hot-list {
+  display: flex;
+  white-space: nowrap;
+}
+
+.hot-store-item {
+  display: inline-block;
+  width: 240rpx;
+  margin-right: 16rpx;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.hot-store-image {
+  width: 240rpx;
+  height: 160rpx;
+  background-color: #f0f0f0;
+}
+
+.hot-store-info {
+  padding: 12rpx 16rpx;
+}
+
+.hot-store-name {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #333333;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 6rpx;
+}
+
+.hot-store-rating {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.star-icon {
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.rating-text {
+  font-size: 22rpx;
+  color: #ff6b35;
+  font-weight: 500;
+}
+
+/* === 附近店铺 === */
+.nearby-section {
+  margin: 0 20rpx 20rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 40rpx;
+}
+
+.empty-image {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.6;
+}
+
+.empty-title {
+  font-size: 28rpx;
+  color: #999999;
+  margin-bottom: 8rpx;
+}
+
+.empty-subtitle {
+  font-size: 24rpx;
+  color: #cccccc;
+}
+
+/* 店铺列表 */
+.stores-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+/* 店铺卡片 */
+.store-card {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.store-image {
+  width: 100%;
+  height: 280rpx;
+  background-color: #f0f0f0;
+}
+
+.store-info {
+  padding: 16rpx 20rpx 20rpx;
+}
+
+.store-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.store-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333333;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.favorite-btn {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.favorite-btn.favorited {
+  transform: scale(1.1);
+}
+
+.favorite-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+/* 评分和距离 */
+.store-meta {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 10rpx;
+}
+
+.rating-section,
+.distance-section {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.star-icon {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.rating {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #ff6b35;
+}
+
+.reviews {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.location-icon {
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.distance {
+  font-size: 22rpx;
+  color: #666666;
+}
+
+/* 标签 */
+.store-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-bottom: 12rpx;
+}
+
+.store-tag {
+  padding: 4rpx 14rpx;
+  background-color: #fff5f0;
+  color: #ff6b35;
+  font-size: 20rpx;
+  border-radius: 6rpx;
+}
+
+/* 底部信息 */
+.store-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.average-price {
+  font-size: 24rpx;
+  color: #f56c6c;
+  font-weight: 500;
+}
+
+.store-status {
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+}
+
+.store-status.open {
+  color: #07c160;
+  background-color: rgba(7, 193, 96, 0.1);
+}
+
+.store-status.closed {
+  color: #999999;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* 加载更多 */
+.load-more {
+  text-align: center;
+  padding: 24rpx 0 60rpx;
+  font-size: 22rpx;
+  color: #cccccc;
+}

@@ -1,0 +1,49 @@
+<!-- 打招呼页面 -->
+<view class="greeting-page">
+  <!-- 顶部导航 -->
+  <view class="g-nav">
+    <view class="g-back" bindtap="goBack">
+      <text class="g-back-icon">✕</text>
+    </view>
+    <text class="g-title">打招呼</text>
+    <view class="g-placeholder"></view>
+  </view>
+
+  <!-- 内容区 -->
+  <view class="g-body">
+    <!-- 预设话术区 -->
+    <view class="g-preset-area" wx:if="{{!isCustom}}">
+      <text class="g-preset-text">{{greetingText}}</text>
+      <view class="g-refresh" bindtap="onRefresh">
+        <text class="g-refresh-text">换一句</text>
+      </view>
+    </view>
+
+    <!-- 自定义模式提示 -->
+    <view class="g-custom-hint" wx:if="{{isCustom}}">
+      <text class="g-hint-text">自定义内容</text>
+      <view class="g-refresh" bindtap="onRefresh">
+        <text class="g-refresh-text">换一句</text>
+      </view>
+    </view>
+
+    <!-- 自定义输入 -->
+    <view class="g-input-area">
+      <input
+        class="g-input"
+        placeholder="或输入你想说的话（最多30字）"
+        value="{{inputText}}"
+        bindinput="onInput"
+        maxlength="30"
+        confirm-type="done"
+        focus="{{true}}"
+      />
+      <text class="g-counter {{inputText.length >= 30 ? 'g-counter-full' : ''}}">{{inputText.length}}/30</text>
+    </view>
+
+    <!-- 发送 -->
+    <view class="g-send {{canSend ? '' : 'g-send-disabled'}}" bindtap="onSend">
+      <text class="g-send-text">发送</text>
+    </view>
+  </view>
+</view>

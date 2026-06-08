@@ -1,0 +1,143 @@
+<view class="throw-container">
+  <!-- 顶部导航栏 -->
+  <view class="top-bar">
+    <navigator class="back-btn" open-type="navigateBack" delta="1">
+      <icon type="back" size="24" color="#333333"></icon>
+    </navigator>
+    
+    <view class="title">扔漂流瓶</view>
+    
+    <view class="save-btn" bindtap="onThrowBottle">
+      <text>扔出去</text>
+    </view>
+  </view>
+
+  <!-- 主要内容区域 -->
+  <scroll-view class="content-scroll" scroll-y>
+    <view class="form-container">
+      <!-- 区域信息卡片 -->
+      <view class="area-card">
+        <text class="area-label">投放地区：</text>
+        <text class="area-value">{{area}}</text>
+      </view>
+
+      <!-- 内容输入区 -->
+      <view class="content-section">
+        <view class="section-header">
+          <text class="section-title">漂流瓶内容</text>
+          <text class="char-count">{{contentCount}}/200</text>
+        </view>
+        
+        <textarea 
+          class="content-input"
+          placeholder="分享你想说的话...比如：这家店的环境真不错，大家一起聊天吧！"
+          value="{{content}}"
+          bindinput="onContentInput"
+          maxlength="200"
+          auto-focus="true"
+          cursor-spacing="20"
+        ></textarea>
+      </view>
+
+      <!-- 快速输入模板 -->
+      <view class="preset-section">
+        <text class="section-title">快速填充</text>
+        
+        <view class="preset-buttons">
+          <button class="preset-btn" data-preset="food_recommend" bindtap="onQuickInput">
+            推荐菜品
+          </button>
+          <button class="preset-btn" data-preset="ask_recommend" bindtap="onQuickInput">
+            求推荐
+          </button>
+          <button class="preset-btn" data-preset="travel" bindtap="onQuickInput">
+            旅游咨询
+          </button>
+          <button class="preset-btn" data-preset="mood" bindtap="onQuickInput">
+            心情分享
+          </button>
+          <button class="preset-btn" data-preset="work" bindtap="onQuickInput">
+            工作压力
+          </button>
+        </view>
+      </view>
+
+      <!-- 包含问题切换 -->
+      <view class="question-section">
+        <view class="question-header">
+          <view class="question-title">
+            <text>包含问题</text>
+            <text class="question-desc">（可让他人回答你的疑问）</text>
+          </view>
+          
+          <switch 
+            checked="{{hasQuestion}}"
+            bindchange="onToggleQuestion"
+            color="#ff6b35"
+          />
+        </view>
+        
+        <view class="question-input-area" wx:if="{{hasQuestion}}">
+          <view class="input-header">
+            <text class="input-label">你的问题</text>
+            <text class="char-count">{{questionCount}}/100</text>
+          </view>
+          
+          <textarea 
+            class="question-input"
+            placeholder="输入你想问的问题...比如：附近有啥好玩的吗？"
+            value="{{question}}"
+            bindinput="onQuestionInput"
+            maxlength="100"
+            auto-focus="false"
+            cursor-spacing="20"
+          ></textarea>
+        </view>
+      </view>
+
+      <!-- 标签选择 -->
+      <view class="tag-section">
+        <text class="section-title">添加标签（最多3个）</text>
+        <text class="tag-desc">帮助漂瓶更快找到感兴趣的人</text>
+        
+        <view class="tag-list">
+          <block wx:for="{{availableTags}}" wx:key="index">
+            <button 
+              class="tag-btn {{selectedTags.indexOf(item) > -1 ? 'selected' : ''}}"
+              data-tag="{{item}}"
+              bindtap="onTagSelect"
+              disabled="{{selectedTags.length >= 3 && selectedTags.indexOf(item) === -1}}">
+              {{item}}
+            </button>
+          </block>
+        </view>
+      </view>
+
+      <!-- 投放说明 -->
+      <view class="info-section">
+        <text class="info-title">投放须知</text>
+        
+        <view class="info-list">
+          <text class="info-item">• 漂流瓶将在{{BOTTLE_EXPIRE_HOURS || '24'}}小时后自动消失</text>
+          <text class="info-item">• 每日最多扔3个漂流瓶</text>
+          <text class="info-item">• 漂流瓶可能漂流到相同地区的其他用户那里</text>
+          <text class="info-item">• 被捞到的漂流瓶只有接收者能看到完整信息</text>
+          <text class="info-item">• 请保持友善交流，禁止恶意内容</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部操作区 -->
+  <view class="bottom-actions">
+    <button class="throw-action-btn" bindtap="onThrowBottle">
+      <icon type="add" size="24" color="#ffffff"></icon>
+      <text>扔进海里</text>
+    </button>
+  </view>
+
+  <!-- 提示信息 -->
+  <view class="toast" wx:if="{{showToast}}">
+    <text class="toast-text">{{toastMessage}}</text>
+  </view>
+</view>
