@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">🍜 食遇 · Foodie Social</h1>
   <p align="center">
-    <em>每个人都是探店博主。每顿饭都不再是一个人的孤独。</em>
+    <em>每个人都是探店博主。每顿饭都不再是一个人的孤独。享受有边界干的社交。本地生活服务的社交蓝海扩展。</em>
   </p>
 </p>
 
