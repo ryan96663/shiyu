@@ -15,7 +15,10 @@
 ---
 # 项目概述
 
-- **快速访问demo演示连接**：https://drive.google.com/file/d/10osDm28INXEOSEpdiLDRu0twqcY0LOwM/view?usp=sharing
+- **快速访问demo演示连接**：
+  - **基本功能演示；餐厅氛围感顾客交流**：https://drive.google.com/file/d/11I5SC9p0ednz4yVTdjPXeCZ3g83gUBV4/view?usp=sharing
+  - **社交场景扩展应用--景区问路**：https://drive.google.com/file/d/1VU5QRpKTihz0d1_nbG73f5yRTN7cVVHx/view?usp=sharing
+  - **本地生活服务场景社交--更有边界干的社交形势--陌生人安慰&陌生人帮买单**：https://drive.google.com/file/d/1S4mfwF0CDPKQs1wRB7pgs3uIUpiwhnX_/view?usp=sharing
 
 ## 为什么需要食遇？
 
